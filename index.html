@@ -3,35 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Notre mariage</title>
-
-<!-- ============================================================
-     COMMENT MODIFIER CE SITE
-     ------------------------------------------------------------
-     TOUT est dans ce seul fichier (index.html) : le texte, le
-     style et le fonctionnement. Il n'y a que les photos qui sont
-     à part, dans un dossier "images" à côté de ce fichier.
-
-     1) TEXTE : cherchez "CONTENU DU SITE" plus bas dans ce fichier
-        (dans la partie <script>). Remplacez les textes entre
-        crochets, ex. [À COMPLÉTER], par les vôtres — en français
-        et en italien.
-
-     2) PHOTOS : créez un dossier nommé "images" à côté de ce
-        fichier index.html, et déposez-y vos photos avec
-        exactement les noms attendus (indiqués dans le script,
-        ex. "images/story-1.jpg"). Tant qu'un fichier n'existe
-        pas encore, un emplacement gris s'affiche à la place —
-        rien ne casse.
-
-     3) LISTE DE NOCES : cherchez "SITE_ITEMS" plus bas pour
-        ajouter, modifier ou supprimer des articles.
-
-     Pour mettre ce site en ligne avec GitHub Pages : créez un
-     dépôt, déposez-y CE fichier (renommé exactement "index.html")
-     et le dossier "images", puis activez Settings → Pages sur la
-     branche main, dossier / (root).
-     ============================================================ -->
+<title>Nous nous marions!</title>
 
 <style>
 :root{
@@ -44,7 +16,7 @@
   --accent-soft: #e4e7df;
   --danger: #9c5b48;
 }
-@media (prefers-color-scheme: dark){
+@media (prefers-color-scheme: white){
   :root:not([data-theme="light"]){
     --bg: #1b1a17;
     --panel: #242320;
@@ -204,30 +176,39 @@ footer{ margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line); 
    ============================================================ */
 var SITE_CONTENT = {
   fr: {
-    coupleNames: "[Prénom] & [Prénom]",
-    dateLine: "[Date] — [Lieu]",
+    coupleNames: "Justine & Nicolò",
+    dateLine: "10 juillet 2027 — Paris",
     nav: { histoire: "Notre histoire", ceremonie: "La cérémonie", reception: "La réception", liste: "La liste de noces" },
     histoire: {
       title: "Notre histoire",
       photos: ["images/story-1.jpg", "images/story-2.jpg"],
       paragraphs: [
-        "[À COMPLÉTER — racontez comment vous vous êtes rencontrés.]",
-        "[À COMPLÉTER — une étape marquante de votre histoire.]"
+        "C’est l’histoire d’un Milanais et d’une Française qui décident de commencer un tandem linguistique.", 
+           "Non, il ne s’agit pas de faire du vélo tandem autour de Zurich, mais bien d’apprendre la langue de l’autre.",
+          "Les deux futurs amoureux se retrouvent chaque semaine : Justine commence des phrases dans un italien douteux,",
+           "dépourvu d’accents toniques, tandis que Nicolò essaie d’apprendre d’autres mots que le lexique technique de l’architecture",
+           "(que, par ailleurs, Justine ne comprend pas). Petit à petit, l’amour grandit dans le cœur de nos deux apprentis linguistes."
+"Le 28 avril 2024, nous commençons notre aventure à deux !** Pas question d’arrêter le tandem : une langue, de toute façon, ça s’apprend",
+           "toute la vie. Chacun apprend à connaître l’autre, mais aussi la culture qui l’accompagne.",
+       "Justine découvre que les pâtes se cuisent avec un minuteur, et non au doigt mouillé. Nicolò, de son côté,",
+           "apprend à apprécier le caractère français et ses lamentations incessantes sur tout et n’importe quoi. Surtout n’importe quoi."
+"Le 19 avril 2026, sur le pont ferroviaire de la gare de Seebach, Justine demande à Nicolò de l’épouser. Oui, nous sommes un couple moderne." 
+           "Et oui, le pont ferroviaire de Seebach est un incontournable romantique du canton de Zurich."
+"Et nous y voilà ! Le 10 juillet 2027, nous nous dirons « oui » pour toujours, entourés de vous, nos amis et notre famille !"
       ]
     },
     ceremonie: {
       title: "La cérémonie",
       photo: "images/ceremony.jpg",
       intro: "[À COMPLÉTER — quelques mots sur la cérémonie.]",
-      heure: { label: "Heure", value: "[À COMPLÉTER]" },
-      lieu: { label: "Lieu", value: "[À COMPLÉTER — adresse]" },
-      tenue: { label: "Tenue", value: "[À COMPLÉTER]" }
+      heure: { label: "Heure", value: "14h30" },
+      lieu: { label: "Lieu", value: "Eglise Saint Jean-Baptiste de Grenelle" },
     },
     reception: {
       title: "La réception",
       photo: "images/reception.jpg",
       intro: "[À COMPLÉTER — quelques mots sur la réception.]",
-      heure: { label: "Heure", value: "[À COMPLÉTER]" },
+      heure: { label: "Heure", value: "à partir de 18h" },
       lieu: { label: "Lieu", value: "[À COMPLÉTER — adresse]" },
       programme: { label: "Programme de la soirée", value: "[À COMPLÉTER]" }
     },
@@ -242,8 +223,8 @@ var SITE_CONTENT = {
     footer: "Merci d'être à nos côtés."
   },
   it: {
-    coupleNames: "[Nome] & [Nome]",
-    dateLine: "[Data] — [Luogo]",
+    coupleNames: "Justine & Nicolò",
+    dateLine: "10 luglio 2027 — Parigi",
     nav: { histoire: "La nostra storia", ceremonie: "La cerimonia", reception: "Il ricevimento", liste: "Lista nozze" },
     histoire: {
       title: "La nostra storia",
@@ -257,9 +238,8 @@ var SITE_CONTENT = {
       title: "La cerimonia",
       photo: "images/ceremony.jpg",
       intro: "[DA COMPLETARE — qualche parola sulla cerimonia.]",
-      heure: { label: "Orario", value: "[DA COMPLETARE]" },
-      lieu: { label: "Luogo", value: "[DA COMPLETARE — indirizzo]" },
-      tenue: { label: "Abbigliamento", value: "[DA COMPLETARE]" }
+      heure: { label: "Orario", value: "14h30" },
+      lieu: { label: "Luogo", value: "Chiesa Saint Jean-Baptiste de Grenelle" }
     },
     reception: {
       title: "Il ricevimento",

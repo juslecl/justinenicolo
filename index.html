@@ -169,6 +169,431 @@ footer{ margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line); 
 
 <script>
 /* ============================================================
+   CONTENU DU SITE — modifiez vos textes ici, en français (fr)
+   et en italien (it). Ne touchez pas aux guillemets " ni aux
+   virgules, seulement au texte entre guillemets.
+   ============================================================ */
+var SITE_CONTENT = {
+  fr: {
+    coupleNames: "Justine & Nicolò",
+    dateLine: "10 juillet 2027 — Paris",
+    intro: "Une phrase savante",
+    nav: { histoire: "Notre histoire", ceremonie: "La cérémonie", reception: "La réception", liste: "La liste de noces" },
+    histoire: {
+      title: "Notre histoire",
+      photos: ["images/story-1.jpg", "images/story-2.jpg"],
+      paragraphs: [
+        "C’est l’histoire d’un Milanais et d’une Française qui décident de commencer un tandem linguistique.", 
+           "Non, il ne s’agit pas de faire du vélo tandem autour de Zurich, mais bien d’apprendre la langue de l’autre.",
+          "Les deux futurs amoureux se retrouvent chaque semaine : Justine commence des phrases dans un italien douteux,",
+           "dépourvu d’accents toniques, tandis que Nicolò essaie d’apprendre d’autres mots que le lexique technique de l’architecture",
+           "(que, par ailleurs, Justine ne comprend pas). Petit à petit, l’amour grandit dans le cœur de nos deux apprentis linguistes.",
+"Le 28 avril 2024, nous commençons notre aventure à deux !** Pas question d’arrêter le tandem : une langue, de toute façon, ça s’apprend",
+           "toute la vie. Chacun apprend à connaître l’autre, mais aussi la culture qui l’accompagne.",
+       "Justine découvre que les pâtes se cuisent avec un minuteur, et non au doigt mouillé. Nicolò, de son côté,",
+           "apprend à apprécier le caractère français et ses lamentations incessantes sur tout et n’importe quoi. Surtout n’importe quoi.",
+"Le 19 avril 2026, sur le pont ferroviaire de la gare de Seebach, Justine demande à Nicolò de l’épouser. Oui, nous sommes un couple moderne.", 
+           "Et oui, le pont ferroviaire de Seebach est un incontournable romantique du canton de Zurich.",
+"Et nous y voilà ! Le 10 juillet 2027, nous nous dirons « oui » pour toujours, entourés de vous, nos amis et notre famille !"
+      ]
+    },
+    ceremonie: {
+      title: "La cérémonie",
+      photo: "images/ceremony.jpg",
+      intro: "[À COMPLÉTER — quelques mots sur la cérémonie.]",
+      heure: { label: "Heure", value: "14h30" },
+      lieu: { label: "Lieu", value: "Eglise Saint Jean-Baptiste de Grenelle" },
+    },
+    reception: {
+      title: "La réception",
+      photo: "images/reception.jpg",
+      intro: "[À COMPLÉTER — quelques mots sur la réception.]",
+      heure: { label: "Heure", value: "à partir de 18h" },
+      lieu: { label: "Lieu", value: "[À COMPLÉTER — adresse]" },
+      programme: { label: "Programme de la soirée", value: "[À COMPLÉTER]" }
+    },
+    registry: {
+      title: "La liste de noces",
+      intro: "Vous pouvez contribuer, en tout ou en partie, au montant de l'un des articles ci-dessous.",
+      goal: "Objectif", raised: "réuni", remaining: "restant", complete: "Objectif atteint",
+      placeholder: "Montant", give: "Verser", thanks: "Merci pour votre contribution !",
+      errTooMuch: "Ce montant dépasse ce qu'il reste à réunir.",
+      errInvalid: "Merci d'indiquer un montant valide.", photo: "Photo"
+    },
+    footer: "Merci d'être à nos côtés."
+  },
+  it: {
+    coupleNames: "Justine & Nicolò",
+    dateLine: "10 luglio 2027 — Parigi",
+    nav: { histoire: "La nostra storia", ceremonie: "La cerimonia", reception: "Il ricevimento", liste: "Lista nozze" },
+    histoire: {
+      title: "La nostra storia",
+      photos: ["images/story-1.jpg", "images/story-2.jpg"],
+      paragraphs: [
+        "[DA COMPLETARE — raccontate come vi siete conosciuti.]",
+        "[DA COMPLETARE — una tappa importante della vostra storia.]"
+      ]
+    },
+    ceremonie: {
+      title: "La cerimonia",
+      photo: "images/ceremony.jpg",
+      intro: "[DA COMPLETARE — qualche parola sulla cerimonia.]",
+      heure: { label: "Orario", value: "14h30" },
+      lieu: { label: "Luogo", value: "Chiesa Saint Jean-Baptiste de Grenelle" }
+    },
+    reception: {
+      title: "Il ricevimento",
+      photo: "images/reception.jpg",
+      intro: "[DA COMPLETARE — qualche parola sul ricevimento.]",
+      heure: { label: "Orario", value: "[DA COMPLETARE]" },
+      lieu: { label: "Luogo", value: "[DA COMPLETARE — indirizzo]" },
+      programme: { label: "Programma della serata", value: "[DA COMPLETARE]" }
+    },
+    registry: {
+      title: "Lista nozze",
+      intro: "Potete contribuire, in tutto o in parte, all'importo di uno degli articoli qui sotto.",
+      goal: "Obiettivo", raised: "raccolto", remaining: "mancante", complete: "Obiettivo raggiunto",
+      placeholder: "Importo", give: "Contribuisci", thanks: "Grazie per il vostro contributo!",
+      errTooMuch: "Questo importo supera la somma mancante.",
+      errInvalid: "Inserite un importo valido.", photo: "Foto"
+    },
+    footer: "Grazie di condividere questo giorno con noi."
+  }
+};
+
+/* ============================================================
+   LISTE DE NOCES — ajoutez, modifiez ou supprimez des articles
+   ici. "image" pointe vers un fichier dans le dossier images/ ;
+   tant qu'il n'existe pas, un emplacement gris s'affiche.
+   ============================================================ */
+var SITE_ITEMS = [
+  { id: "item-1", name: { fr: "[Nom de l'article 1]", it: "[Nome dell'articolo 1]" }, price: 100, raised: 0, image: "images/item-1.jpg" },
+  { id: "item-2", name: { fr: "[Nom de l'article 2]", it: "[Nome dell'articolo 2]" }, price: 200, raised: 0, image: "images/item-2.jpg" },
+  { id: "item-3", name: { fr: "[Nom de l'article 3]", it: "[Nome dell'articolo 3]" }, price: 150, raised: 0, image: "images/item-3.jpg" },
+  { id: "item-4", name: { fr: "[Nom de l'article 4]", it: "[Nome dell'articolo 4]" }, price: 300, raised: 0, image: "images/item-4.jpg" }
+];
+
+/* ============================================================
+   À partir d'ici : uniquement le fonctionnement du site.
+   Rien à modifier en dessous de cette ligne.
+   ============================================================ */
+(function(){
+
+  function renderPhoto(container, src, placeholderText, sizeClass){
+    container.innerHTML = "";
+    container.className = "photo-box" + (sizeClass ? " " + sizeClass : "");
+    var img = document.createElement("img");
+    img.src = src;
+    img.alt = "";
+    img.onerror = function(){
+      container.className = "photo-slot" + (sizeClass ? " " + sizeClass : "");
+      container.textContent = placeholderText;
+    };
+    container.appendChild(img);
+  }
+
+  function initTabs(){
+    var tabs = document.querySelectorAll("nav button[role='tab']");
+    var sections = document.querySelectorAll("main > section");
+    tabs.forEach(function(tab){
+      tab.addEventListener("click", function(){
+        tabs.forEach(function(t){ t.setAttribute("aria-selected", "false"); });
+        sections.forEach(function(s){ s.classList.remove("active"); });
+        tab.setAttribute("aria-selected", "true");
+        document.getElementById(tab.getAttribute("data-tab")).classList.add("active");
+      });
+    });
+  }
+
+  var STORAGE_KEY = "wedding-registry-contributions";
+  function loadContributions(){
+    try{ var raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; }
+    catch(e){ return {}; }
+  }
+  function saveContributions(data){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e){}
+  }
+  var contributions = loadContributions();
+  SITE_ITEMS.forEach(function(it){
+    if (typeof contributions[it.id] === "number") it.raised = contributions[it.id];
+  });
+
+  var CHF = new Intl.NumberFormat("fr-CH", { maximumFractionDigits: 0 });
+
+  function renderRegistry(lang){
+    var s = SITE_CONTENT[lang].registry;
+    var grid = document.getElementById("registry-grid");
+    grid.innerHTML = "";
+
+    SITE_ITEMS.forEach(function(it){
+      var remaining = Math.max(0, it.price - it.raised);
+      var pct = Math.min(100, Math.round((it.raised / it.price) * 100));
+      var isComplete = remaining <= 0;
+
+      var card = document.createElement("div");
+      card.className = "item-card" + (isComplete ? " complete" : "");
+
+      var photoDiv = document.createElement("div");
+      var titleEl = document.createElement("h3");
+      titleEl.textContent = it.name[lang];
+
+      var priceLine = document.createElement("div");
+      priceLine.className = "item-price-line";
+      priceLine.textContent = s.goal + " : CHF " + CHF.format(it.price);
+
+      var track = document.createElement("div");
+      track.className = "progress-track";
+      var fill = document.createElement("div");
+      fill.className = "progress-fill";
+      fill.style.width = pct + "%";
+      track.appendChild(fill);
+
+      var status = document.createElement("div");
+      status.className = "item-status";
+      status.innerHTML = isComplete
+        ? "<strong>" + s.complete + "</strong>"
+        : "<strong>CHF " + CHF.format(it.raised) + "</strong> " + s.raised + " — CHF " + CHF.format(remaining) + " " + s.remaining;
+
+      var contribute = document.createElement("div");
+      contribute.className = "contribute";
+      var input = document.createElement("input");
+      input.type = "number"; input.min = "1"; input.step = "1";
+      input.placeholder = s.placeholder; input.setAttribute("aria-label", s.placeholder);
+      var button = document.createElement("button");
+      button.type = "button"; button.textContent = s.give;
+      contribute.appendChild(input); contribute.appendChild(button);
+
+      var errorEl = document.createElement("div");
+      errorEl.className = "error-msg";
+      var thanksEl = document.createElement("div");
+      thanksEl.className = "thankyou"; thanksEl.textContent = s.thanks;
+
+      card.appendChild(photoDiv); card.appendChild(titleEl); card.appendChild(priceLine);
+      card.appendChild(track); card.appendChild(status); card.appendChild(contribute);
+      card.appendChild(errorEl); card.appendChild(thanksEl);
+      grid.appendChild(card);
+
+      renderPhoto(photoDiv, it.image, s.photo, "square");
+
+      function submit(){
+        var sNow = SITE_CONTENT[document.documentElement.lang].registry;
+        var val = parseFloat(input.value);
+        if (!val || val <= 0 || isNaN(val)){
+          errorEl.textContent = sNow.errInvalid; errorEl.classList.add("show"); return;
+        }
+        var remainingNow = it.price - it.raised;
+        if (val > remainingNow + 0.0001){
+          errorEl.textContent = sNow.errTooMuch; errorEl.classList.add("show"); return;
+        }
+        errorEl.classList.remove("show");
+        it.raised = Math.min(it.price, it.raised + val);
+        contributions[it.id] = it.raised;
+        saveContributions(contributions);
+        renderRegistry(document.documentElement.lang);
+      }
+      button.addEventListener("click", submit);
+      input.addEventListener("keydown", function(e){ if (e.key === "Enter") submit(); });
+    });
+  }
+
+  var LANG_KEY = "wedding-lang";
+  function applyLang(lang){
+    var c = SITE_CONTENT[lang];
+    document.documentElement.lang = lang;
+
+    document.getElementById("couple-names").textContent = c.coupleNames;
+    document.getElementById("date-line").textContent = c.dateLine;
+    document.querySelectorAll("nav button[data-nav]").forEach(function(btn){
+      btn.textContent = c.nav[btn.getAttribute("data-nav")];
+    });
+
+    document.getElementById("histoire-title").textContent = c.histoire.title;
+    var histoireText = document.getElementById("histoire-text");
+    histoireText.innerHTML = "";
+    c.histoire.paragraphs.forEach(function(p){
+      var el = document.createElement("p"); el.textContent = p; histoireText.appendChild(el);
+    });
+    renderPhoto(document.getElementById("histoire-photo-1"), c.histoire.photos[0], c.registry.photo, "wide");
+    renderPhoto(document.getElementById("histoire-photo-2"), c.histoire.photos[1], c.registry.photo, "");
+
+    document.getElementById("ceremonie-title").textContent = c.ceremonie.title;
+    document.getElementById("ceremonie-intro").textContent = c.ceremonie.intro;
+    document.getElementById("ceremonie-heure-label").textContent = c.ceremonie.heure.label;
+    document.getElementById("ceremonie-heure-value").textContent = c.ceremonie.heure.value;
+    document.getElementById("ceremonie-lieu-label").textContent = c.ceremonie.lieu.label;
+    document.getElementById("ceremonie-lieu-value").textContent = c.ceremonie.lieu.value;
+    renderPhoto(document.getElementById("ceremonie-photo"), c.ceremonie.photo, c.registry.photo, "wide");
+
+    document.getElementById("reception-title").textContent = c.reception.title;
+    document.getElementById("reception-intro").textContent = c.reception.intro;
+    document.getElementById("reception-heure-label").textContent = c.reception.heure.label;
+    document.getElementById("reception-heure-value").textContent = c.reception.heure.value;
+    document.getElementById("reception-lieu-label").textContent = c.reception.lieu.label;
+    document.getElementById("reception-lieu-value").textContent = c.reception.lieu.value;
+    document.getElementById("reception-programme-label").textContent = c.reception.programme.label;
+    document.getElementById("reception-programme-value").textContent = c.reception.programme.value;
+    renderPhoto(document.getElementById("reception-photo"), c.reception.photo, c.registry.photo, "wide");
+
+    document.getElementById("registry-title").textContent = c.registry.title;
+    document.getElementById("registry-intro").textContent = c.registry.intro;
+    document.getElementById("site-footer").textContent = c.footer;
+
+    document.querySelectorAll(".lang-switch button").forEach(function(btn){
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-lang") === lang ? "true" : "false");
+    });
+    try { localStorage.setItem(LANG_KEY, lang); } catch(e){}
+
+    renderRegistry(lang);
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    initTabs();
+    document.querySelectorAll(".lang-switch button").forEach(function(btn){
+      btn.addEventListener("click", function(){ applyLang(btn.getAttribute("data-lang")); });
+    });
+    var savedLang = null;
+    try { savedLang = localStorage.getItem(LANG_KEY); } catch(e){}
+    applyLang(savedLang === "it" ? "it" : "fr");
+  });
+
+})();
+</script>
+</body>
+</html>  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap{ max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
+header{ padding: 40px 0 20px; border-bottom: 1px solid var(--line); }
+.top-row{ display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.names{ font-size: 1.9rem; letter-spacing: 0.02em; margin: 0; }
+.date-place{ margin: 6px 0 0; color: var(--muted); font-size: 1.05rem; }
+.lang-switch{ display: flex; gap: 8px; flex-shrink: 0; padding-top: 4px; }
+.lang-switch button{
+  border: 1px solid transparent; background: none; cursor: pointer;
+  font-size: 1.35rem; line-height: 1; padding: 4px 6px; border-radius: 4px;
+  opacity: 0.55; transition: opacity 0.15s ease, border-color 0.15s ease;
+}
+.lang-switch button:hover{ opacity: 0.85; }
+.lang-switch button[aria-pressed="true"]{ opacity: 1; border-color: var(--line); }
+.lang-switch button:focus-visible, nav button:focus-visible,
+.contribute button:focus-visible, .contribute input:focus-visible{
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+nav{ display: flex; gap: 28px; margin-top: 26px; overflow-x: auto; }
+nav button{
+  background: none; border: none; font-family: inherit; font-size: 1.05rem;
+  color: var(--muted); cursor: pointer; padding: 0 0 12px; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+nav button[aria-selected="true"]{ color: var(--text); border-bottom-color: var(--accent); }
+main{ padding-top: 40px; }
+section{ display: none; }
+section.active{ display: block; }
+section h2{ font-size: 1.5rem; font-weight: normal; margin: 0 0 20px; }
+section p{ margin: 0 0 16px; max-width: 62ch; }
+.photo-slot{
+  width: 100%; aspect-ratio: 4 / 3; border: 1px dashed var(--line); border-radius: 2px;
+  display: flex; align-items: center; justify-content: center; color: var(--muted);
+  font-size: 0.95rem; margin: 4px 0 22px; background: var(--panel);
+}
+.photo-slot.wide{ aspect-ratio: 16/9; }
+.photo-slot.square{ aspect-ratio: 1/1; margin: 0 0 14px; }
+.photo-box img{ display: block; width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 2px; margin: 4px 0 22px; }
+.photo-box.wide img{ aspect-ratio: 16/9; }
+.photo-box.square img{ aspect-ratio: 1/1; margin: 0 0 14px; }
+.infoblock{ border-top: 1px solid var(--line); padding: 18px 0; }
+.infoblock:last-child{ border-bottom: 1px solid var(--line); }
+.infoblock h3{ margin: 0 0 6px; font-size: 1.05rem; font-weight: normal; }
+.infoblock p{ margin: 0; color: var(--muted); }
+.registry-intro{ margin-bottom: 28px; }
+.registry-grid{ display: grid; grid-template-columns: 1fr; gap: 28px; }
+@media (min-width: 560px){ .registry-grid{ grid-template-columns: 1fr 1fr; } }
+.item-card{ border: 1px solid var(--line); background: var(--panel); padding: 16px; display: flex; flex-direction: column; }
+.item-card h3{ margin: 0 0 4px; font-weight: normal; font-size: 1.1rem; }
+.item-price-line{ color: var(--muted); font-size: 0.92rem; margin-bottom: 10px; }
+.progress-track{ height: 6px; background: var(--accent-soft); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+.progress-fill{ height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+.item-status{ font-size: 0.88rem; color: var(--muted); margin-bottom: 14px; }
+.item-status strong{ color: var(--text); }
+.contribute{ display: flex; gap: 8px; margin-top: auto; }
+.contribute input{
+  flex: 1; min-width: 0; font-family: inherit; font-size: 1rem; padding: 7px 8px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--text); border-radius: 2px;
+}
+.contribute button{
+  font-family: inherit; font-size: 0.95rem; padding: 7px 14px; border: 1px solid var(--accent);
+  background: var(--accent); color: var(--panel); cursor: pointer; border-radius: 2px; white-space: nowrap;
+}
+.contribute button:hover{ opacity: 0.9; }
+.item-card.complete .contribute{ display: none; }
+.item-card.complete .item-status{ color: var(--accent); }
+.thankyou{ font-size: 0.88rem; color: var(--accent); margin-top: 8px; display: none; }
+.item-card.complete .thankyou{ display: block; }
+.error-msg{ font-size: 0.82rem; color: var(--danger); margin-top: 6px; display: none; }
+.error-msg.show{ display: block; }
+footer{ margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; text-align: center; }
+@media (prefers-reduced-motion: reduce){ *{ transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="top-row">
+      <div>
+        <p class="names" id="couple-names"></p>
+        <p class="date-place" id="date-line"></p>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Langue / Lingua">
+        <button type="button" data-lang="fr" aria-pressed="true" title="Français" aria-label="Français">🇫🇷</button>
+        <button type="button" data-lang="it" aria-pressed="false" title="Italiano" aria-label="Italiano">🇮🇹</button>
+      </div>
+    </div>
+    <nav role="tablist" aria-label="Sections">
+      <button type="button" role="tab" data-tab="histoire" aria-selected="true" data-nav="histoire"></button>
+      <button type="button" role="tab" data-tab="ceremonie" aria-selected="false" data-nav="ceremonie"></button>
+      <button type="button" role="tab" data-tab="reception" aria-selected="false" data-nav="reception"></button>
+      <button type="button" role="tab" data-tab="liste" aria-selected="false" data-nav="liste"></button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="histoire" class="active">
+      <h2 id="histoire-title"></h2>
+      <div id="histoire-photo-1"></div>
+      <div id="histoire-text"></div>
+      <div id="histoire-photo-2"></div>
+    </section>
+
+    <section id="ceremonie">
+      <h2 id="ceremonie-title"></h2>
+      <p id="ceremonie-intro"></p>
+      <div class="infoblock"><h3 id="ceremonie-heure-label"></h3><p id="ceremonie-heure-value"></p></div>
+      <div class="infoblock"><h3 id="ceremonie-lieu-label"></h3><p id="ceremonie-lieu-value"></p></div>
+      <div id="ceremonie-photo"></div>
+    </section>
+
+    <section id="reception">
+      <h2 id="reception-title"></h2>
+      <p id="reception-intro"></p>
+      <div class="infoblock"><h3 id="reception-heure-label"></h3><p id="reception-heure-value"></p></div>
+      <div class="infoblock"><h3 id="reception-lieu-label"></h3><p id="reception-lieu-value"></p></div>
+      <div class="infoblock"><h3 id="reception-programme-label"></h3><p id="reception-programme-value"></p></div>
+      <div id="reception-photo"></div>
+    </section>
+
+    <section id="liste">
+      <h2 id="registry-title"></h2>
+      <p class="registry-intro" id="registry-intro"></p>
+      <div class="registry-grid" id="registry-grid"></div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+</div>
+
+<script>
+/* ============================================================
    ============================================================ */
 var SITE_CONTENT = {
   fr: {

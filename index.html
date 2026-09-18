@@ -235,6 +235,11 @@ footer{ margin-top: 60px; padding-top: 20px; color: var(--muted); font-size: 0.9
   <footer id="site-footer"></footer>
 </div>
 
+<!-- Shared contribution totals live here. Updating this and re-publishing
+     the page (via the "artifact" capability) is what makes a contribution
+     visible to everyone who opens the site afterwards, not just this device. -->
+<script type="application/json" id="registry-state">{}</script>
+
 <script>
 /* ============================================================
    CONTENU DU SITE — modifiez vos textes ici, en français (fr)
@@ -256,7 +261,7 @@ var SITE_CONTENT = {
       photos: ["images/story-1.jpg", "images/story-2.jpg"],
       paragraphs: [
         "C’est l’histoire d’un Milanais et d’une Française qui décident de commencer un tandem. Non, il ne s’agit pas de faire du vélo tandem autour de Zurich, mais bien d’apprendre la langue de l’autre. Les deux futurs amoureux se retrouvent chaque semaine : Justine commence des phrases dans un italien douteux, dépourvu d’accents toniques, tandis que Nicolò essaie d’apprendre d’autres mots que le lexique technique de l’architecture (que, par ailleurs, Justine ne comprend pas). Petit à petit, l’amour grandit dans le cœur de nos deux apprentis linguistes.",
-"Le 28 avril 2024, nous commençons notre aventure à deux ! Pas question d’arrêter le tandem : une langue, de toute façon, ça s’apprend toute la vie. Chacun apprend à connaître l’autre, mais aussi la culture qui l’accompagne. Justine découvre que les pâtes se cuisent avec un minuteur, et non au doigt mouillé. Nicolò, de son côté, apprend à apprécier le caractère français et ses lamentations incessantes sur tout et n’importe quoi. Surtout n’importe quoi.",
+"Le 28 avril 2024, nous commençons notre aventure à deux !** Pas question d’arrêter le tandem : une langue, de toute façon, ça s’apprend toute la vie. Chacun apprend à connaître l’autre, mais aussi la culture qui l’accompagne. Justine découvre que les pâtes se cuisent avec un minuteur, et non au doigt mouillé. Nicolò, de son côté, apprend à apprécier le caractère français et ses lamentations incessantes sur tout et n’importe quoi. Surtout n’importe quoi.",
 "Le 19 avril 2026, sur le pont ferroviaire de la gare de Seebach, Justine demande à Nicolò de l’épouser. Oui, nous sommes un couple moderne. Et oui, le pont ferroviaire de Seebach est un incontournable romantique du canton de Zurich.",
 "Et nous y voilà ! Le 10 juillet 2027, nous nous dirons « oui » pour toujours, entourés de vous, nos amis et notre famille !"
       ]
@@ -273,7 +278,7 @@ var SITE_CONTENT = {
       photos: ["images/reception.jpg"],
       intro: "[À COMPLÉTER — quelques mots sur la réception.]",
       heure: { label: "Heure", value: "à partir de 18h" },
-      lieu: { label: "Lieu", value: "Les Erables" },
+      lieu: { label: "Lieu", value: "[À COMPLÉTER — adresse]" },
       programme: { label: "Programme de la soirée", value: "[À COMPLÉTER]" }
     },
     registry: {
@@ -340,6 +345,8 @@ var SITE_ITEMS = [
 ];
 
 /* ============================================================
+   À partir d'ici : uniquement le fonctionnement du site.
+   Rien à modifier en dessous de cette ligne.
    ============================================================ */
 (function(){
 
@@ -419,18 +426,32 @@ var SITE_ITEMS = [
     setBodyBg("histoire");
   }
 
-  var STORAGE_KEY = "wedding-registry-contributions";
-  function loadContributions(){
-    try{ var raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; }
-    catch(e){ return {}; }
+  /* Contribution totals are stored as JSON inside the page itself
+     (see #registry-state). Whoever contributes updates that JSON and
+     re-publishes the page via the "artifact" capability, so the next
+     person to open the link sees the new totals baked in — no separate
+     database, no per-device storage. */
+  var registryStateEl = document.getElementById("registry-state");
+  function loadRegistryState(){
+    try{
+      var parsed = JSON.parse(registryStateEl.textContent || "{}");
+      return (parsed && typeof parsed === "object") ? parsed : {};
+    } catch(e){ return {}; }
   }
-  function saveContributions(data){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e){}
+  function saveRegistryStateToDom(state){
+    registryStateEl.textContent = JSON.stringify(state);
   }
-  var contributions = loadContributions();
+  var registryState = loadRegistryState();
   SITE_ITEMS.forEach(function(it){
-    if (typeof contributions[it.id] === "number") it.raised = contributions[it.id];
+    if (typeof registryState[it.id] === "number") it.raised = registryState[it.id];
   });
+
+  /* Resolves to the "artifact" capability namespace, or null if this
+     view doesn't have it (capability not declared/granted, or the page
+     is open somewhere other than a published Claude artifact). */
+  var artifactCapPromise = (window.claude && typeof window.claude.use === "function")
+    ? window.claude.use("artifact").catch(function(){ return null; })
+    : Promise.resolve(null);
 
   var CHF = new Intl.NumberFormat("fr-CH", { maximumFractionDigits: 0 });
 
@@ -501,9 +522,22 @@ var SITE_ITEMS = [
         }
         errorEl.classList.remove("show");
         it.raised = Math.min(it.price, it.raised + val);
-        contributions[it.id] = it.raised;
-        saveContributions(contributions);
+        registryState[it.id] = it.raised;
+        saveRegistryStateToDom(registryState);
         renderRegistry(document.documentElement.lang);
+
+        button.disabled = true;
+        artifactCapPromise.then(function(cap){
+          if (!cap || typeof cap.publish !== "function") return;
+          var html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+          return cap.publish(html);
+        }).catch(function(){
+          /* Publish failed or wasn't available (e.g. a read-only viewer, or
+             a transient error) — the contribution still shows on this
+             device; it just didn't get saved for everyone. */
+        }).then(function(){
+          button.disabled = false;
+        });
       }
       button.addEventListener("click", submit);
       input.addEventListener("keydown", function(e){ if (e.key === "Enter") submit(); });
